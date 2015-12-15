@@ -28,4 +28,7 @@ RUN apt-get update && apt-get install -y \
 # Grant www-data permission to write files 
 RUN usermod -u 1000 www-data 
 
+# Enable apache default site
+RUN a2ensite 000-default
+
 COPY ./data /var/www/html
