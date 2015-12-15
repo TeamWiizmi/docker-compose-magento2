@@ -25,4 +25,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install mbstring
 
+# Grant www-data permission to write files 
+RUN usermod -u 1000 www-data 
+
 COPY ./data /var/www/html
