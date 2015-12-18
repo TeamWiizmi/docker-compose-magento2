@@ -1,26 +1,9 @@
-mysql_data:
-  image: busybox:latest
-  container_name: magento_db_data
-  command: /bin/echo
-  volumes:
-    - 'magento_db_data:/var/lib/mysql'
-
-mysql:
-  image: mysql:latest
-  container_name: magento_db
-  ports:
-    - '127.0.0.1:3306:3306'
-  volumes_from:
-    - mysql_data
-  environment:
-    - "MYSQL_ROOT_PASSWORD=root"
-
 magento_app:
   build: .
   container_name: magento_app
-  ports:
-    - '80:80'
-  links:
+  external_links:
     - mysql
+  environment:
+    - 'VIRTUAL_HOST=magento2.192.168.99.100.xip.io,magento2.192.168.0.16.xip.io'
   volumes:
     - './data:/var/www/html'

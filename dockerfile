@@ -23,12 +23,21 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install xsl \
     && docker-php-ext-install zip \
     && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install opcache \
     && docker-php-ext-install mbstring
 
+# Install opcache
+RUN { \
+    echo 'opcache.memory_consumption=256'; \
+    echo 'opcache.interned_strings_buffer=12'; \
+    echo 'opcache.max_accelerated_files=16000'; \
+    echo 'opcache.revalidate_freq=60'; \
+    echo 'opcache.fast_shutdown=1'; \
+    echo 'opcache.enable_file_override=1;' \
+    echo 'opcache.enable_cli=1'; \
+  } > /usr/local/etc/php/conf.d/opcache-recommended.ini
+
 # Grant www-data permission to write files 
-RUN usermod -u 1000 www-data 
+RUN usermod -u 1000 www-data && a2enmod rewrite
 
-# Enable apache default site
-RUN a2ensite 000-default
-
-COPY ./data /var/www/html
+# COPY ./data /var/www/html
